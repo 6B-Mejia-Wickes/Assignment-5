@@ -86,6 +86,27 @@ angular.module('listings').controller('ListingsController', ['$scope', '$locatio
         Implement the remove function. If the removal is successful, navigate back to 'listing.list'. Otherwise, 
         display the error. 
        */
+      Listings.delete($stateParams.listingId)
+              .then(function(response) {
+                $state.go('listings.list', { successMessage: 'Listing succesfully removed!' });
+              }, function(error) {
+                $scope.error = 'Unable to remove listing!\n' + error;
+              });
+    };
+
+    $scope.getMapCoordinates = function() {
+      $scope.listings = [];
+
+      Listings.getAll()
+              .then(function(response) {
+                response.data.forEach(function(listing){
+                  if(listing.coordinates) {
+                    $scope.listings.push(listing);
+                  }
+                });
+              }, function(error) {
+                $scope.error = 'Unable to retrieve listings!\n' + error;
+              });
     };
 
     /* Bind the success message to the scope if it exists as part of the current state */
