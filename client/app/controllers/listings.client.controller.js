@@ -94,6 +94,21 @@ angular.module('listings').controller('ListingsController', ['$scope', '$locatio
               });
     };
 
+    $scope.getMapCoordinates = function() {
+      $scope.listings = [];
+
+      Listings.getAll()
+              .then(function(response) {
+                response.data.forEach(function(listing){
+                  if(listing.coordinates) {
+                    $scope.listings.push(listing);
+                  }
+                });
+              }, function(error) {
+                $scope.error = 'Unable to retrieve listings!\n' + error;
+              });
+    };
+
     /* Bind the success message to the scope if it exists as part of the current state */
     if($stateParams.successMessage) {
       $scope.success = $stateParams.successMessage;
